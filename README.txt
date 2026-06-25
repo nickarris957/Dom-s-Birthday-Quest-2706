@@ -9,6 +9,6 @@ Files required:
 - index.html
 - style.css
 - script.js
-- assets/aframe-day.png
-- assets/aframe-night.png
-- assets/bathroom.png
+- aframe-day.png
+- aframe-night.png
+- bathroom.png
