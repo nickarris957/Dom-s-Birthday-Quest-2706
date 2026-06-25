@@ -16,7 +16,7 @@
     <div class="gate-card">
       <p class="eyebrow">Private birthday transmission</p>
       <h1>Level 27 is locked.</h1>
-      <p class="lede">Enter the secret code to begin Dom's birthday quest.</p>
+      <p class="lede">A tiny birthday quest for Dom.</p>
       <p class="hint">Hint: birth date.</p>
       <form id="gateForm" class="gate-form" autocomplete="off">
         <label for="passcode" class="sr-only">Birthday passcode</label>
@@ -36,12 +36,12 @@
       <div class="hero-content">
         <p class="eyebrow">27 on the 27th</p>
         <h1><span>26</span><b>→</b><span>27</span></h1>
-        <p class="lede">Congratulations Bub. You have officially unlocked Level 27.</p>
+        <p class="lede">Congratulations Dom. You've officially unlocked Level 27.</p>
         <p class="soft">Four presents. Four tiny challenges. Lots of questionable puns.</p>
         <a class="primary" href="#progress">Begin the quest</a>
       </div>
       <button class="easter muffin" type="button" data-egg="Muffin located. Very important side quest complete.">🧁</button>
-      <button class="easter heart" type="button" data-egg="Achievement unlocked: World's best bub.">♡</button>
+      <button class="easter heart" type="button" data-egg="Achievement unlocked: Big muffin energy detected.">♡</button>
     </header>
 
     <section id="progress" class="progress panel compact">
@@ -81,15 +81,16 @@
       <div class="gift-copy">
         <p class="tag">Gift 2</p>
         <h2>Case File #270627</h2>
-        <p>A crime thriller mystery. No spoilers, except the present.</p>
-        <p class="soft">Solve the tiny case to unlock the Kindle stash.</p>
+        <p>A cosy little crime-thriller case. No scary difficulty, just suspiciously good vibes.</p>
+        <p class="soft">Solve the case to unlock the Kindle stash.</p>
       </div>
       <div class="interactive case-file">
         <div class="paper">
           <p class="eyebrow">Puzzle</p>
-          <p>The killer always lies.</p>
-          <p>The chef never lies.</p>
-          <p>Who stole the birthday cake?</p>
+          <p>Clue 1: I keep Dom saying “just one more chapter”.</p>
+          <p>Clue 2: I am usually full of suspects, secrets, and dramatic reveals.</p>
+          <p>Clue 3: I am exactly what a new Kindle was born for.</p>
+          <p><strong>What am I?</strong></p>
           <div class="answer-row">
             <input id="caseAnswer" placeholder="Your answer" />
             <button class="primary" id="caseSubmit" type="button">Submit</button>
@@ -110,18 +111,18 @@
         <p class="tag">Gift 3</p>
         <h2>Dinner, but make it fancy.</h2>
         <p>There is a reservation card. It is being dramatic.</p>
-        <p class="soft">Flip the card to reveal where we're going.</p>
-        <button class="primary" id="flipDinner" type="button">Flip card</button>
+        <p class="soft">Scratch the gold card to reveal where we're going.</p>
       </div>
       <div class="interactive dinner-scene">
-        <div class="reservation-card" id="dinnerCard">
-          <div class="card-face front">Scratch-ish<br><span>tap to reveal</span></div>
-          <div class="card-face back">
+        <div class="scratch-card" id="scratchCard">
+          <div class="scratch-reveal">
             <p class="eyebrow">Unlocked</p>
             <h3>Grill Americano</h3>
             <p>A very nice dinner for us.</p>
             <p class="pun">Dress code: looking cute. You win by default.</p>
           </div>
+          <canvas id="scratchCanvas" aria-label="Scratch to reveal dinner gift"></canvas>
+          <p class="scratch-hint">Scratch here, detective Dom.</p>
         </div>
       </div>
     </section>
@@ -131,8 +132,16 @@
         <p class="tag">Gift 4</p>
         <h2>The big one.</h2>
         <p>The fourth star needs all the others lit first.</p>
-        <p class="soft">When the first three gifts are unlocked, the sky will know what to do.</p>
-        <button class="primary" id="finalButton" type="button" disabled>Reveal final gift</button>
+        <p class="soft">When the first three gifts are unlocked, solve the final sky clue.</p>
+        <div class="final-puzzle" id="finalPuzzle" hidden>
+          <p>Final clue: not city lights, not fairy lights — the best ceiling for a tiny adventure.</p>
+          <div class="answer-row">
+            <input id="finalAnswer" placeholder="Your answer" />
+            <button class="primary" id="finalSubmit" type="button">Unlock</button>
+          </div>
+          <p id="finalFeedback" class="feedback"></p>
+        </div>
+        <button class="primary" id="finalButton" type="button" disabled hidden>Reveal final gift</button>
       </div>
       <div class="interactive constellation-box">
         <svg viewBox="0 0 320 240" class="constellation" aria-hidden="true">
@@ -157,7 +166,7 @@
         <p class="eyebrow">Booking unlocked</p>
         <h3>A-frame tiny home stay</h3>
         <p>A proper little getaway with bush, baths, stars, and absolutely no meetings.</p>
-        <p class="pun">Tiny home. Big bub behaviour.</p>
+        <p class="pun">Tiny home. Big muffin energy.</p>
       </div>
     </section>
 

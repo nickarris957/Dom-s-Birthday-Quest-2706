@@ -1,6 +1,6 @@
 const $ = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
-const accepted = new Set(['2706','270627','0627','27','270626']);
+const accepted = new Set(['2706','270627','0627','27']);
 const gate = $('#gate');
 const site = $('#site');
 const form = $('#gateForm');
@@ -22,7 +22,7 @@ form.addEventListener('submit', (e)=>{
   const value = input.value.replace(/\D/g,'');
   if(accepted.has(value)) unlockSite();
   else {
-    error.textContent = 'Not quite. Think birthday date, bub.';
+    error.textContent = 'Not quite. Birthday maths, muffin.';
     input.focus();
   }
 });
@@ -41,9 +41,9 @@ function lightStar(n){
   $(`.quest-star[data-star="${n}"]`)?.classList.add('lit');
   unlocked.add(String(n));
   if(unlocked.has('1') && unlocked.has('2') && unlocked.has('3')){
-    $('#finalButton').disabled = false;
+    $('#finalPuzzle').hidden = false;
     $('.constellation').classList.add('active');
-    showToast('Three stars lit. The final reveal is ready.');
+    showToast('Three stars lit. Final sky clue unlocked.');
   }
 }
 
@@ -59,23 +59,98 @@ $$('[data-unlock="gift1"]').forEach(btn=>btn.addEventListener('click',()=>{
 
 $('#caseSubmit').addEventListener('click',()=>{
   const answer = $('#caseAnswer').value.trim().toLowerCase();
-  if(answer.includes('killer')){
-    $('#caseFeedback').textContent = 'Correct. Very detective. Slightly concerning.';
+  const good = ['thriller','crime','mystery','book','novel','crime thriller','twisty'].some(w=>answer.includes(w));
+  if(good){
+    $('#caseFeedback').textContent = 'Correct. The Kindle has accepted your evidence.';
     $('#reveal-gift2').classList.add('unlocked');
     lightStar(2);
     showToast('Gift 2 unlocked: thriller era engaged.');
   } else {
-    $('#caseFeedback').textContent = 'Close, but the cake case remains unsolved.';
+    $('#caseFeedback').textContent = 'Close. Think Kindle + suspects + one more chapter.';
   }
 });
 $('#caseAnswer').addEventListener('keydown', e=>{ if(e.key === 'Enter') $('#caseSubmit').click(); });
 
-$('#flipDinner').addEventListener('click',()=>{
-  $('#dinnerCard').classList.add('flipped');
-  lightStar(3);
-  showToast('Gift 3 unlocked: fancy dinner mode.');
+// Proper scratch card for Gift 3
+(function initScratch(){
+  const canvas = $('#scratchCanvas');
+  const card = $('#scratchCard');
+  if(!canvas || !card) return;
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+  let scratched = false;
+
+  function resize(){
+    const rect = card.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+    canvas.style.width = rect.width + 'px';
+    canvas.style.height = rect.height + 'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    paintCover(rect.width, rect.height);
+  }
+  function paintCover(w,h){
+    const g = ctx.createLinearGradient(0,0,w,h);
+    g.addColorStop(0,'#d3a34b');
+    g.addColorStop(.5,'#f4d28a');
+    g.addColorStop(1,'#9a642c');
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,w,h);
+    ctx.fillStyle = 'rgba(45,22,11,.75)';
+    ctx.font = '700 22px Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('SCRATCH TO REVEAL', w/2, h/2 - 6);
+    ctx.font = '16px Georgia, serif';
+    ctx.fillText('Fancy dinner evidence inside', w/2, h/2 + 24);
+  }
+  function point(e){
+    const rect = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return {x:t.clientX - rect.left, y:t.clientY - rect.top};
+  }
+  function scratch(e){
+    if(!drawing) return;
+    e.preventDefault();
+    const p = point(e);
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,28,0,Math.PI*2);
+    ctx.fill();
+    if(!scratched && scratchedEnough()){
+      scratched = true;
+      canvas.classList.add('finished');
+      lightStar(3);
+      showToast('Gift 3 unlocked: fancy dinner mode.');
+    }
+  }
+  function scratchedEnough(){
+    const {width,height} = canvas;
+    const pixels = ctx.getImageData(0,0,width,height).data;
+    let transparent = 0;
+    for(let i=3;i<pixels.length;i+=40) if(pixels[i] < 20) transparent++;
+    return transparent / (pixels.length/40) > .28;
+  }
+  ['mousedown','touchstart'].forEach(ev=>canvas.addEventListener(ev, e=>{drawing=true; scratch(e);}, {passive:false}));
+  ['mousemove','touchmove'].forEach(ev=>canvas.addEventListener(ev, scratch, {passive:false}));
+  ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev=>canvas.addEventListener(ev, ()=>drawing=false));
+  window.addEventListener('resize', resize);
+  resize();
+})();
+
+$('#finalSubmit').addEventListener('click',()=>{
+  const answer = $('#finalAnswer').value.trim().toLowerCase();
+  if(answer.includes('star')){
+    $('#finalFeedback').textContent = 'Correct. The sky is very impressed.';
+    $('#finalButton').hidden = false;
+    $('#finalButton').disabled = false;
+    showToast('Final gift reveal unlocked.');
+  } else {
+    $('#finalFeedback').textContent = 'Not quite. Look up, Dom.';
+  }
 });
-$('#dinnerCard').addEventListener('click',()=>$('#flipDinner').click());
+$('#finalAnswer').addEventListener('keydown', e=>{ if(e.key === 'Enter') $('#finalSubmit').click(); });
 
 $('#finalButton').addEventListener('click',()=>{
   lightStar(4);
