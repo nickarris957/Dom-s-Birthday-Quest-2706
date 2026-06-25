@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dom's Birthday Quest</title>
+<style>
+:root{
+  --ink:#0b1020; --night:#070b18; --navy:#111a33; --gold:#f7c96b; --cream:#fff2d8; --muted:#c8bda8;
+  --rose:#ff9b8f; --line:rgba(255,242,216,.18); --glass:rgba(255,255,255,.06);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--night);color:var(--cream);font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+body.locked{overflow:hidden}.serif{font-family:Georgia, 'Times New Roman', serif}.script{font-family:'Brush Script MT','Segoe Script',cursive;font-weight:400}
+button,input{font:inherit} a{color:inherit}.sr{position:absolute;left:-999px}
+.sky{position:fixed;inset:0;z-index:-5;background:radial-gradient(circle at 50% 110%,#362444 0,#14203e 32%,#080d1d 72%,#050713 100%);overflow:hidden}.sky:before,.sky:after{content:"";position:absolute;inset:0;background-image:radial-gradient(circle,#fff 0 1px,transparent 1.5px),radial-gradient(circle,#f7c96b 0 1px,transparent 1.5px);background-size:180px 180px,260px 260px;background-position:12px 40px,80px 120px;opacity:.45;animation:drift 70s linear infinite}.sky:after{filter:blur(1px);opacity:.24;animation-duration:120s}.glow{position:fixed;inset:auto 0 -35vh 0;height:60vh;background:radial-gradient(circle,#f7c96b22,transparent 55%);z-index:-4;pointer-events:none}.shooting{position:fixed;top:12%;left:-15%;width:160px;height:2px;background:linear-gradient(90deg,transparent,#fff,transparent);transform:rotate(-20deg);filter:drop-shadow(0 0 8px #fff);animation:shoot 16s ease-in-out infinite;z-index:-3}
+@keyframes drift{to{transform:translate3d(-140px,-120px,0)}}@keyframes shoot{0%,78%,100%{opacity:0;transform:translateX(0) rotate(-20deg)}82%{opacity:1}89%{opacity:0;transform:translateX(125vw) rotate(-20deg)}}
+/* Lock */
+.lock{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 70% 30%,#1c284dcc,transparent 34%),linear-gradient(#070b18ee,#070b18);transition:.8s ease}.lock.open{opacity:0;visibility:hidden;pointer-events:none}.lock-card{width:min(680px,100%);border:1px solid var(--line);border-radius:30px;padding:36px;background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.03));box-shadow:0 30px 100px #000a;text-align:center;position:relative;overflow:hidden}.lock-card:before{content:"🧁";font-size:42px;display:block;margin-bottom:10px;filter:drop-shadow(0 0 18px #f7c96b88)}.lock h1{font-size:clamp(42px,9vw,86px);margin:0;color:var(--gold);letter-spacing:.02em;text-shadow:0 0 24px #f7c96b33}.lock p{font-size:18px;line-height:1.6;color:var(--muted)}.pass-row{display:flex;gap:10px;margin:24px auto 10px;max-width:420px}.pass-row input{flex:1;background:#070b18;border:1px solid var(--line);border-radius:16px;padding:16px;color:var(--cream);outline:none}.pass-row input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #f7c96b22}.pass-row button,.primary{background:var(--gold);color:#18100b;border:0;border-radius:16px;padding:14px 18px;font-weight:800;cursor:pointer;box-shadow:0 10px 30px #f7c96b22;transition:.2s}.pass-row button:hover,.primary:hover{transform:translateY(-2px)}.wrong{min-height:22px;color:#ffb3aa}.note{position:absolute;right:24px;bottom:20px;transform:rotate(-4deg);background:#e7d0a6;color:#21190f;padding:14px 18px;border-radius:4px;box-shadow:0 8px 20px #0007;font-family:Georgia,serif}
+/* Sections */
+section{min-height:100vh;padding:100px 6vw;position:relative}.hero{display:grid;place-items:center;text-align:center}.hero h2{letter-spacing:.36em;font-size:13px;color:var(--gold);text-transform:uppercase}.hero h1{font-size:clamp(64px,13vw,168px);margin:10px 0;color:var(--gold);text-shadow:0 0 38px #f7c96b44}.hero p{max-width:660px;margin:10px auto;font-size:clamp(18px,2vw,24px);line-height:1.55;color:#f6e4c1}.scrollcue{margin-top:36px;color:var(--gold);animation:bob 1.6s ease-in-out infinite}@keyframes bob{50%{transform:translateY(8px)}}
+.map{min-height:auto;padding-top:80px}.map h2{text-align:center;font-size:clamp(34px,5vw,68px);margin:0 0 10px}.map>p{text-align:center;color:var(--muted);font-size:18px;margin-bottom:50px}.stars-map{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:22px}.quest-star{background:linear-gradient(180deg,#ffffff0e,#ffffff04);border:1px solid var(--line);border-radius:28px;padding:28px 18px;text-align:center;min-height:170px;cursor:pointer;position:relative;overflow:hidden;transition:.25s}.quest-star:hover{transform:translateY(-6px);border-color:#f7c96b66}.quest-star .star{font-size:56px;color:var(--gold);display:block;filter:drop-shadow(0 0 20px #f7c96b88);animation:pulse 2s ease-in-out infinite}.quest-star.locked{opacity:.45;cursor:not-allowed}.quest-star.done{border-color:#f7c96b88;background:#f7c96b12}.quest-star small{display:block;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}.quest-star b{opacity:0;transition:.3s}.quest-star.done b,.quest-star.active b{opacity:1}.quest-star:not(.done):not(.active) b:before{content:"Hidden surprise";opacity:.65}.quest-star:not(.done):not(.active) b{font-size:0}.quest-star:not(.done):not(.active) b:before{font-size:16px}@keyframes pulse{50%{transform:scale(1.08)}}
+.chapter{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,520px);gap:54px;align-items:center;border-top:1px solid var(--line)}.chapter h3{letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-size:14px}.chapter h2{font-size:clamp(44px,7vw,92px);line-height:.95;margin:0 0 22px}.chapter p{font-size:18px;line-height:1.7;color:#dfd2ba}.panel{border:1px solid var(--line);border-radius:34px;background:linear-gradient(145deg,#ffffff12,#ffffff04);box-shadow:0 30px 90px #0005;padding:28px;min-height:420px;position:relative;overflow:hidden}.hidden{display:none!important}.revealed{animation:pop .55s cubic-bezier(.2,1,.3,1) both}@keyframes pop{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+/* Gift 1 */
+.parcel{height:360px;display:grid;place-items:center}.box{width:260px;height:190px;background:linear-gradient(135deg,#ad6f41,#6c3a22);border-radius:18px;position:relative;box-shadow:0 30px 80px #0008;cursor:pointer;transition:.4s}.box:before,.box:after{content:"";position:absolute;background:#f1c46d}.box:before{width:28px;height:100%;left:50%;top:0;transform:translateX(-50%)}.box:after{height:28px;width:100%;left:0;top:46%}.ribbon{position:absolute;top:-50px;left:50%;width:130px;height:90px;transform:translateX(-50%);border:18px solid #f1c46d;border-bottom:0;border-radius:80px 80px 0 0}.box.open{transform:rotate(-2deg) translateY(12px);opacity:.2}.voucher{background:#f4dfb6;color:#23180e;border-radius:14px;padding:28px;box-shadow:0 20px 60px #0007;transform:rotate(-2deg);text-align:center}.voucher h4{font-family:Georgia,serif;font-size:34px;margin:0 0 8px}.voucher strong{font-size:22px}.tiny{font-size:14px;color:#82633c}
+/* Gift 2 */
+.desk{background:linear-gradient(135deg,#2a1a12,#0b0b12);}.case-paper{background:#ead5ad;color:#20150e;border-radius:12px;padding:26px;box-shadow:0 20px 60px #0008;transform:rotate(-1deg)}.case-paper h4{font-family:Georgia,serif;font-size:28px;margin:0 0 16px}.riddle{font-family:Georgia,serif;font-size:21px;line-height:1.7}.answer{display:flex;gap:10px;margin-top:20px}.answer input{flex:1;background:#140e0a;border:1px solid #7b6040;border-radius:12px;padding:13px;color:var(--cream)}.answer button{background:#20150e;color:#f8d487;border:1px solid #7b6040;border-radius:12px;padding:12px 16px;cursor:pointer}.hint{color:#8e341f;margin-top:10px;min-height:20px}
+/* Gift 3 */
+.envelope{height:360px;display:grid;place-items:center}.env{width:310px;height:200px;background:#c99a6a;border-radius:12px;position:relative;box-shadow:0 24px 70px #0008;cursor:grab}.env:before{content:"";position:absolute;inset:0;background:linear-gradient(150deg,transparent 49%,#95653c 50%,transparent 51%),linear-gradient(30deg,transparent 49%,#95653c 50%,transparent 51%);opacity:.7}.seal{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;background:#8e2521;box-shadow:0 0 0 7px #6b1815,0 8px 20px #0005;display:grid;place-items:center;color:#ffc27b;font-size:32px;transition:.3s}.env.open .seal{transform:translate(135px,-105px) rotate(30deg);opacity:.2}.invite{background:#f2dfbd;color:#1d130c;border-radius:16px;padding:30px;text-align:center;box-shadow:0 24px 70px #0008}.invite h4{font-family:Georgia,serif;font-size:40px;margin:0 0 10px}.invite p{color:#2b1b12;margin:8px 0}
+/* Gift 4 */
+.constellation{height:430px;background:radial-gradient(circle at 50% 20%,#1b2444,#050711);border-radius:26px;border:1px solid var(--line);position:relative;overflow:hidden}.constellation svg{position:absolute;inset:0;width:100%;height:100%}.node{cursor:pointer;filter:drop-shadow(0 0 14px #f7c96b);transition:.2s}.node:hover{transform:scale(1.15)}.node.done{fill:var(--gold)}.path{stroke:var(--gold);stroke-width:4;stroke-linecap:round;stroke-dasharray:800;stroke-dashoffset:800}.path.draw{animation:draw 1.2s forwards}@keyframes draw{to{stroke-dashoffset:0}}.final-reveal{padding:0;min-height:100vh}.cinema{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:50px;padding:90px 6vw;background:radial-gradient(circle at 70% 30%,#f7c96b17,transparent 32%),#050711}.aframe-art{height:min(72vh,680px);position:relative;border-radius:34px;overflow:hidden;background:linear-gradient(#081228,#0a0b0f);box-shadow:0 30px 100px #000a;border:1px solid var(--line)}.milky{position:absolute;inset:0;background-image:radial-gradient(circle,#fff 0 1px,transparent 2px),radial-gradient(circle,#f7c96b 0 1px,transparent 2px);background-size:90px 90px,140px 140px;opacity:.8}.mountains{position:absolute;left:0;right:0;bottom:0;height:45%;background:linear-gradient(145deg,transparent 48%,#101b14 49%),linear-gradient(220deg,transparent 52%,#0c1510 53%);background-size:55% 100%;background-repeat:no-repeat;background-position:left bottom,right bottom}.cabin{position:absolute;left:50%;bottom:8%;transform:translateX(-50%);width:56%;height:62%;clip-path:polygon(50% 0,100% 100%,0 100%);background:linear-gradient(90deg,#29160d,#b46f37 45%,#3d2113);box-shadow:0 0 60px #f7c96b55}.cabin:before{content:"";position:absolute;inset:8% 12%;clip-path:polygon(50% 0,100% 100%,0 100%);border:14px solid #111;}.door{position:absolute;left:42%;bottom:0;width:16%;height:34%;background:#ffcc7a;box-shadow:0 0 30px #f7c96b}.deck{position:absolute;left:18%;right:18%;bottom:5%;height:6px;background:#80502e;box-shadow:0 0 20px #f7c96b}.bath{position:absolute;right:11%;bottom:13%;width:94px;height:38px;border-radius:50%;border:8px solid #bfc5bd;background:#1a2430;box-shadow:0 0 30px #f7c96b44}.fairylights{position:absolute;left:19%;right:19%;bottom:34%;height:40px;border-top:2px dashed #f7c96baa}.fairylights:after{content:"✦ ✦ ✦ ✦ ✦ ✦ ✦";color:var(--gold);letter-spacing:18px;position:absolute;top:-13px;left:2%}.ending h2{font-size:clamp(50px,8vw,120px);line-height:.95;margin:0;color:var(--gold)}.ending p{font-size:21px;line-height:1.7;color:#f0dfc3}.handnote{background:#e7d0a6;color:#21190f;padding:22px;border-radius:6px;transform:rotate(-2deg);display:inline-block;box-shadow:0 20px 60px #0007;font-family:Georgia,serif;margin-top:18px}.complete{min-height:80vh;text-align:center;display:grid;place-items:center}.complete h2{font-size:clamp(52px,8vw,110px);color:var(--gold);margin:0}.complete p{max-width:780px;font-size:22px;line-height:1.8;color:#eadbbf}.egg{position:fixed;right:18px;bottom:18px;background:#ffffff0c;border:1px solid var(--line);border-radius:99px;padding:12px 15px;cursor:pointer;z-index:4}.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(30px);opacity:0;background:#151a2c;border:1px solid #f7c96b55;border-radius:16px;color:var(--cream);padding:14px 18px;z-index:20;transition:.3s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:850px){section{padding:70px 22px}.stars-map{grid-template-columns:1fr 1fr}.chapter,.cinema{grid-template-columns:1fr}.note{position:static;margin-top:20px}.pass-row{flex-direction:column}.hero h1{font-size:72px}.chapter h2{font-size:48px}.panel{min-height:auto}.cinema{padding:70px 22px}.aframe-art{height:520px}}
+</style>
+</head>
+<body class="locked">
+<div class="sky"></div><div class="glow"></div><div class="shooting"></div>
+<div class="lock" id="lock">
+  <div class="lock-card">
+    <h1 class="script">Hey Bub</h1>
+    <p>Something big is brewing. Not just coffee. Definitely not subtle.</p>
+    <p><strong>Hint:</strong> the day someone very cute turns 27.</p>
+    <form class="pass-row" id="passForm"><input id="pass" autocomplete="off" placeholder="Birthday code" autofocus><button>→</button></form>
+    <div class="wrong" id="wrong"></div>
+    <div class="note">P.S. I heard muffins go great with adventures. ♥</div>
+  </div>
+</div>
+<main>
+<section class="hero" id="top">
+  <div>
+    <h2>A little birthday adventure for</h2>
+    <h1 class="script">Dom</h1>
+    <p>Happy 27th, Muffin. I hid four little surprises in here. Some will make you think, some will hopefully make you smile, and one... I really hope you'll love.</p>
+    <a class="primary" href="#map">Start the quest</a>
+    <div class="scrollcue">⌄</div>
+  </div>
+</section>
+<section class="map" id="map">
+  <h2 class="serif">Four stars.</h2>
+  <p>Each one hides a little adventure. No spoilers. Big muffin energy only.</p>
+  <div class="stars-map">
+    <div class="quest-star active" data-go="gift1"><small>Star 1</small><span class="star">★</span><b>Hidden surprise</b></div>
+    <div class="quest-star locked" data-go="gift2"><small>Star 2</small><span class="star">★</span><b>Hidden surprise</b></div>
+    <div class="quest-star locked" data-go="gift3"><small>Star 3</small><span class="star">★</span><b>Hidden surprise</b></div>
+    <div class="quest-star locked" data-go="gift4"><small>Star 4</small><span class="star">★</span><b>Hidden surprise</b></div>
+  </div>
+</section>
+<section class="chapter" id="gift1">
+  <div><h3>Star One</h3><h2 class="serif">A small mess, on purpose.</h2><p>I thought you and a friend might like getting your hands dirty in a way that doesn't involve me spilling something.</p><p>Tap the present to unwrap it.</p></div>
+  <div class="panel"><div class="parcel"><div class="box" id="box"><span class="ribbon"></span></div><div class="voucher hidden" id="v1"><h4>Craft & Soul</h4><strong>2 hour session for you + a friend</strong><p class="tiny">Manly. Clay. Excellent little creations. Probably one iconic mug.</p><button class="primary next" data-done="1" data-next="gift2">Light the next star</button></div></div></div>
+</section>
+<section class="chapter" id="gift2">
+  <div><h3>Star Two</h3><h2 class="serif">A case for Detective Dom.</h2><p>This one felt right because your Kindle deserves a suspicious number of twisty little books.</p></div>
+  <div class="panel desk"><div class="case-paper"><h4>Case File #27</h4><div class="riddle">I steal your sleep.<br>I hide clues in plain sight.<br>You promise “one more chapter.”<br>Then suddenly it's midnight.<br><br>What am I?</div><form class="answer" id="riddleForm"><input id="riddleInput" placeholder="Type your answer..."><button>Submit</button></form><div class="hint" id="riddleHint"></div><div class="voucher hidden" id="v2"><h4>Case closed</h4><strong>$100 Amazon Kindle voucher</strong><p class="tiny">For all the crime thrillers, suspicious twists and “I knew it” moments.</p><button class="primary next" data-done="2" data-next="gift3">Light the next star</button></div></div></div>
+</section>
+<section class="chapter" id="gift3">
+  <div><h3>Star Three</h3><h2 class="serif">A nice dinner, no detective work required.</h2><p>No puzzle here. Just an envelope. Break the seal and try to act surprised when I order something with too much confidence.</p></div>
+  <div class="panel"><div class="envelope"><div class="env" id="env"><div class="seal">♥</div></div><div class="invite hidden" id="v3"><h4>Grill Americano</h4><p>A voucher for us to use for a very nice dinner.</p><p>Dress code: looking cute. Mandatory.</p><button class="primary next" data-done="3" data-next="gift4">Light the final star</button></div></div></div>
+</section>
+<section class="chapter" id="gift4">
+  <div><h3>Star Four</h3><h2 class="serif">The last one is hidden in the sky.</h2><p>Draw the roofline in the stars. Start at the bottom left, climb to the top, then come back down. You'll know when it feels right.</p></div>
+  <div class="panel"><div class="constellation" id="constellation"><svg viewBox="0 0 600 430">
+    <path id="roofPath" class="path" d="M130 330 L300 80 L470 330" fill="none"/>
+    <circle class="node" data-i="0" cx="130" cy="330" r="18" fill="#f7c96b"/>
+    <circle class="node" data-i="1" cx="300" cy="80" r="18" fill="#f7c96b"/>
+    <circle class="node" data-i="2" cx="470" cy="330" r="18" fill="#f7c96b"/>
+    <circle cx="210" cy="180" r="8" fill="#fff6"/><circle cx="390" cy="180" r="8" fill="#fff6"/><circle cx="300" cy="260" r="8" fill="#fff6"/>
+    <text x="300" y="395" text-anchor="middle" fill="#fff2d8" font-size="20">connect the three gold stars</text>
+  </svg></div><div id="constMsg" class="hint"></div></div>
+</section>
+<section class="final-reveal hidden" id="final">
+  <div class="cinema"><div class="aframe-art"><div class="milky"></div><div class="mountains"></div><div class="cabin"><div class="door"></div></div><div class="deck"></div><div class="fairylights"></div><div class="bath"></div></div><div class="ending"><h2 class="serif">One more adventure.</h2><p>Under the stars. In the bush. Just us.</p><p>A tiny A-frame stay with long baths, slow mornings and absolutely no reason to rush anywhere.</p><div class="handnote">Hunter Valley-ish. Mystery mode. Big muffin energy.</div></div></div>
+</section>
+<section class="complete"><div><h2 class="script">Happy Birthday, Muffin</h2><p>Thanks for making ordinary days my favourite ones. Thanks for putting up with my terrible jokes. Thanks for always being up for another adventure.</p><p>I hope 27 is your favourite year yet.</p><p>Love,<br>Nick xx</p></div></section>
+</main>
+<button class="egg" id="egg">🧁</button><div class="toast" id="toast">Achievement unlocked: Big Muffin Energy 🏆</div>
+<script>
+const okCodes=['2706','270627','0627','27'];const lock=document.getElementById('lock'),pass=document.getElementById('pass'),wrong=document.getElementById('wrong');
+document.getElementById('passForm').addEventListener('submit',e=>{e.preventDefault();if(okCodes.includes(pass.value.trim())){document.body.classList.remove('locked');lock.classList.add('open');setTimeout(()=>document.getElementById('top').scrollIntoView(),200)}else{wrong.textContent='Close, but the birthday gods disagree.';pass.value='';pass.focus();}});
+function unlock(n){document.querySelector(`[data-go="gift${n}"]`)?.classList.remove('locked');document.querySelector(`[data-go="gift${n}"]`)?.classList.add('active');}
+function done(n,label){const s=document.querySelector(`[data-go="gift${n}"]`);if(s){s.classList.add('done');s.querySelector('b').textContent=label;}}
+document.querySelectorAll('.quest-star').forEach(s=>s.addEventListener('click',()=>{if(!s.classList.contains('locked'))document.getElementById(s.dataset.go).scrollIntoView({behavior:'smooth'})}));
+document.getElementById('box').onclick=()=>{box.classList.add('open');setTimeout(()=>document.getElementById('v1').classList.remove('hidden'),300)};
+document.getElementById('env').onclick=()=>{env.classList.add('open');setTimeout(()=>{env.classList.add('hidden');v3.classList.remove('hidden')},450)};
+document.querySelectorAll('.next').forEach(btn=>btn.addEventListener('click',()=>{const d=btn.dataset.done; const labels={1:'Craft & Soul',2:'Kindle voucher',3:'Dinner date'};done(d,labels[d]);unlock(Number(d)+1);document.getElementById(btn.dataset.next).scrollIntoView({behavior:'smooth'});}));
+document.getElementById('riddleForm').addEventListener('submit',e=>{e.preventDefault();const a=riddleInput.value.toLowerCase().trim();const good=['thriller','crime thriller','crime novel','novel','book','story'];if(good.some(g=>a.includes(g))){riddleHint.textContent='Correct. Suspiciously clever.';v2.classList.remove('hidden');v2.classList.add('revealed')}else{riddleHint.textContent='Not quite. Think twisty Kindle obsession.'}});
+let order=[0,1,2],pos=0;document.querySelectorAll('.node').forEach(node=>node.addEventListener('click',()=>{const i=+node.dataset.i;if(i===order[pos]){node.classList.add('done');pos++;constMsg.textContent=['Good start.','Yep. Roofline forming...','There it is.'][pos-1]||'';if(pos===3){roofPath.classList.add('draw');done(4,'Tiny home escape');setTimeout(()=>{document.getElementById('final').classList.remove('hidden');document.getElementById('final').scrollIntoView({behavior:'smooth'})},1300)}}else{constMsg.textContent='Almost. Start from the left, up to the top, then down.'}}));
+egg.onclick=()=>{toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2400)};
+</script>
+</body>
+</html>
